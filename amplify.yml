@@ -4,7 +4,7 @@ backend:
     build:
       commands:
         - npm install
-        # --outputs-out-dir を指定してフロントエンドが読み取れる場所に配置します
+        # --outputs-out-dir . を追加して、カレントディレクトリに json を出力させる
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID --outputs-out-dir .
 frontend:
   phases:
@@ -13,8 +13,8 @@ frontend:
         - npm install
     build:
       commands:
-        # ビルド前に設定ファイルが存在するか確認（デバッグ用）
-        - ls -al
+        # ビルド前に設定ファイルが存在するかログで確認（これで原因がわかります）
+        - ls -l amplify_outputs.json || echo "ERROR: amplify_outputs.json not found"
         - npm run build
   artifacts:
     baseDirectory: dist
