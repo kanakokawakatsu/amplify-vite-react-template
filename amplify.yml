@@ -3,9 +3,9 @@ backend:
   phases:
     build:
       commands:
-        # ここを npm ci から npm install に変更
         - npm install
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+        # --outputs-out-dir を指定してフロントエンドが読み取れる場所に配置します
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID --outputs-out-dir .
 frontend:
   phases:
     preBuild:
@@ -13,6 +13,8 @@ frontend:
         - npm install
     build:
       commands:
+        # ビルド前に設定ファイルが存在するか確認（デバッグ用）
+        - ls -al
         - npm run build
   artifacts:
     baseDirectory: dist
